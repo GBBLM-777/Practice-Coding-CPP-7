@@ -1,0 +1,217 @@
+/*
+* Programmer: MANGONON, Gabriel Bom - Bom L.
+* Date Created: 9/12/2023
+* Terminal No: 00
+* Program: BSCS
+* Course / Section: CSS122L/FOPI01
+*/
+
+#include<iostream>
+#include<iomanip>
+#include<bits/stdc++.h>//a header file that includes all the standard libraries.
+
+using namespace std; 
+
+void getBinDisplay(int *ptr, int xsize); //to display the elements in the array in choice 1 ({4, 7, 8, 10, 14, 21, 22, 36, 62, 77, 81, 91}).
+int getLoc(int *ptr, int size, int xtarget); //to process binary searching.
+char getMenu(); //to display the choices.
+void getInput(double *ptr, int xsize); //to populate and input the n numberof grades.
+double getElim(double *ptr, int xsize); //to process, eliminate, and display to value to be eliminated. Then, output the average in the main program and display the average value in 2 decimal places.
+char getTry(); //to ask the user to try again.
+
+int main() 
+{ 		
+	int binNum[] = {4, 7, 8, 10, 14, 21, 22, 36, 62, 77, 81, 91};  	
+		
+	while (1) 
+	{ 		
+		char choice = getMenu(); 		
+		
+		try 
+		{ 			
+			if (choice <= '3' && choice >= '1') 
+			{ 		
+				//Choice [1]: Binary Searching		
+				if (choice == '1') 
+				{ 					
+					system("cls");	
+					cout << "Option 1: Binary Searching\n"; 									
+					while (1) 
+					{ 							
+						cout << "Displaying elements in the array\n"; 
+						cout << " ";						
+					
+						getBinDisplay(binNum, 12); 											
+						
+						cout << "enter your target key: "; 						
+						int tar; cin >> tar; 					
+						int key = getLoc(binNum, 12, tar); 						
+						if (key != -1) 
+						{ 	
+							system("cls");					
+							cout << tar << " is at location [" << key << "]\n"; 						
+						}//end-if
+						else 
+						{ 	
+							system("cls");					
+							cout << tar << " is not in the list\n"; 						
+						}//end-else					
+		
+						char ch = getTry(); 						
+						if (ch == 'n') 
+						{ 							
+							break; 						
+						}//end-while 					
+					}//end-while				
+				}//end-if				
+
+				//Choice [2]: Grade Elimination
+				else if (choice == '2') 
+				{ 			
+					system("cls");		
+					cout << "Option 2: Grade Elimination\n"; 					
+					while (1) 
+					{ 						
+						cout << "enter your desired number of grades [5 to 10 only]: "; 					
+						int gradelim;
+						cin >> gradelim; 						
+						
+						try 
+						{ 							
+							if (gradelim >= 5 && gradelim <= 10) 
+							{ 								
+								system("cls");	
+								double* ptr; 								
+								cout << "enter " << gradelim << " grades\n"; 								
+								ptr = (double*)malloc(gradelim * sizeof(double)); 								
+	
+								getInput(ptr, gradelim); 								
+								double aver = getElim(ptr, gradelim); 								
+	
+								cout << "average is " << fixed << setprecision(2) << aver << "\n"; 							
+		
+							}//end-if
+							else 
+							{ 								
+								throw (gradelim); 							
+							}//end-int main				
+		
+						}//end-try						
+		
+						catch (int gradelim) 
+						{ 							
+							system("cls");	
+							cout << gradelim << " invalid... please re-enter\n"; 					
+						}//end-catch			
+						
+						char ch = getTry(); 						
+						if (ch == 'n') 
+						{ 							
+							break; 					
+						}//end-if		
+					}//end-while			
+				}//end-else if 				
+
+				//Choice [3]: Exit
+				else if (choice == '3') 
+				{ 		
+					system("cls");						
+					break; 					
+				}//end-else if		
+			}//end-if		
+		
+			else 
+			{ 						
+				throw choice; 			
+			}//end-else	
+		}//end-try	
+	
+		catch (char choice) 
+		{ 			
+			system("cls");	
+			cout << "invalid choice please try again.\n"; 		
+		}//end-catch
+	}//end-while
+	return 0; 
+}//end-int main
+
+
+/////////////////////////////////// GET-BIN-DISPLAY ///////////////////////////////////////////
+void getBinDisplay(int *ptr, int xsize) 
+{ 	
+	for (int i = 0; i < xsize; i++) 
+	{ 		
+		cout << *ptr << " "; 		
+		ptr++; 	
+	}//end-for
+	cout << endl; 
+}//end-void getBinDisplay
+
+
+/////////////////////////////////// GET-LOC ///////////////////////////////////////////
+int getLoc(int *ptr, int size, int xtarget) 
+{ 	
+	int bin = -1; 
+		if (binary_search(ptr, ptr + size, xtarget)) 
+		{ 
+			bin = find(ptr, ptr + size, xtarget) - ptr; 	
+		}//end-if
+		
+		return bin; 
+}//end-int getLoc
+
+
+/////////////////////////////////// GET-MENU ///////////////////////////////////////////	
+char getMenu() 
+{ 		
+	cout << "----------CHOICES----------\n"; 	
+	cout << "[1] binary Searching\n"; 	
+	cout << "[2] grade elimination\n"; 	
+	cout << "[3] exit\n"; 	
+	cout << "enter your choice: "; 	
+	char choice; 	
+	cin >> choice; 	return choice; 
+}//end-char getMenu
+	
+
+/////////////////////////////////// GET-INPUT ///////////////////////////////////////////
+void getInput(double *ptr, int xsize) 
+{ 	
+	for (int i = 0; i < xsize; i++) 
+	{ 		
+		cout << "grade[" << i + 1 << "]: "; 		
+		cin >> ptr[i]; 	
+	}//end-for
+}//end-void getInput
+
+
+/////////////////////////////////// GET-ELIM ///////////////////////////////////////////
+double getElim(double *ptr, int xsize) 
+{ 	
+	cout << "enter the element to eliminate: "; 	
+	double elim; 
+	cin >> elim; 	
+	double sum = 0.0; 	
+	for (int i = 0; i < xsize; i++) 
+	{ 		
+		if (ptr[i] != elim) 
+		{ 		
+			sum += ptr[i]; 	
+		}//end-if
+		else 
+		{ 			
+			cout << elim << " is eliminated\n"; 		
+		}//end-else
+	}//end-for
+	return (sum / (xsize - 1.0)); 
+}//end-double getElim
+
+
+/////////////////////////////////// GET-TRY ///////////////////////////////////////////
+char getTry() 
+{ 
+	cout << "Do you want to try again?[y/n]: "; 	
+	char ans; cin >> ans; 		
+					
+	return ans; 
+}//end-char getTry
